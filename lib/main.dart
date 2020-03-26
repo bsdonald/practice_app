@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import './screens/profile_screen.dart';
+// import './screens/profile_screen.dart';
 import './screens/home_screen.dart';
-// import './screens/log_in_screen.dart';
+import './screens/log_in_screen.dart';
 import './screens/add_screen.dart';
 import './screens/character_detail_screen.dart';
 import './providers/characters.dart';
-import './providers/accounts.dart';
+// import './providers/accounts.dart';
+import './providers/auth.dart';
+import './screens/splash_screen.dart';
 
 void main() => runApp(MyApp());
 
@@ -18,25 +20,39 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider.value(
-          value: Characters(),
+          value: Auth(),
         ),
         ChangeNotifierProvider.value(
-          value: Accounts(),
+          value: Characters(),
         ),
-      ],
-      child: MaterialApp(
-        title: 'Flutter Demo',
-        theme: ThemeData(
-          primarySwatch: Colors.red,
-        ),
-        home: HomeScreen(),
-        routes: {
-          // ProfileScreen.routeName: (ctx) => ProfileScreen(),
-          AddScreen.routeName: (ctx) => AddScreen(),
-          CharacterDetailScreen.routeName: (ctx) => CharacterDetailScreen(),
-          // LoginScreen.routeName: (ctx) => LoginScreen(),
-        },
+        // ChangeNotifierProvider.value(
+        //   value: Accounts(),
         // ),
+      ],
+      child: Consumer<Auth>(
+        builder: (ctx, auth, _) => MaterialApp(
+          title: 'Flutter Demo',
+          theme: ThemeData(
+            primarySwatch: Colors.red,
+          ),
+          home: auth.isAuth
+          ? HomeScreen()
+          : FutureBuilder(
+                  future: auth.tryAutoLogin(),
+                  builder: (ctx, authResultSnapshot) =>
+                      authResultSnapshot.connectionState ==
+                              ConnectionState.waiting
+                          ? SplashScreen()
+                          : LoginScreen(),
+                ),
+          routes: {
+            // ProfileScreen.routeName: (ctx) => ProfileScreen(),
+            AddScreen.routeName: (ctx) => AddScreen(),
+            CharacterDetailScreen.routeName: (ctx) => CharacterDetailScreen(),
+            LoginScreen.routeName: (ctx) => LoginScreen(),
+          },
+          // ),
+        ),
       ),
     );
   }

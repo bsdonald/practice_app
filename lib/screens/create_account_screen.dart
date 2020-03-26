@@ -3,9 +3,10 @@ import 'package:provider/provider.dart';
 
 import '../providers/account.dart';
 import '../providers/accounts.dart';
+import '../providers/auth.dart';
 
 class CreateAccountScreen extends StatefulWidget {
-  static const routeName = '/add-profile';
+  static const routeName = '/add_account';
 
   @override
   _CreateAccountScreenState createState() => _CreateAccountScreenState();
@@ -14,7 +15,8 @@ class CreateAccountScreen extends StatefulWidget {
 class _CreateAccountScreenState extends State<CreateAccountScreen> {
   var _editedAccount = Account(
     id: '',
-    name: '',
+    firstName: '',
+    lastName: '',
     email: '',
     imageUrl: '',
   );
@@ -22,12 +24,14 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
   final _form = GlobalKey<FormState>();
 
   var _initValues = {
-    'name': '',
+    'firstName': '',
+    'lastName': '',
     'email': '',
     'imageUrl': '',
   };
 
-  final _nameFocusNode = FocusNode();
+  final _firstNameFocusNode = FocusNode();
+  final _lastNameFocusNode = FocusNode();
   final _emailFocusNode = FocusNode();
   final _imageUrlController = TextEditingController();
   final _imageUrlFocusNode = FocusNode();
@@ -35,7 +39,8 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
   @override
   void dispose() {
     _imageUrlFocusNode.removeListener(_updateImageUrl);
-    _nameFocusNode.dispose();
+    _firstNameFocusNode.dispose();
+    _lastNameFocusNode.dispose();
     _emailFocusNode.dispose();
     _imageUrlController.dispose();
     _imageUrlFocusNode.dispose();
@@ -65,14 +70,15 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
     }
     _form.currentState.save();
     Provider.of<Accounts>(context, listen: false).addAccount(_editedAccount);
-    Navigator.of(context).pop();
+    Navigator.of(context).pushReplacementNamed('/character_list_screen');
   }
 
   @override
   Widget build(BuildContext context) {
+    final deviceSize = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
-        title: Text('Add Account'),
+        title: Text('Create Account'),
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.person_add),
@@ -86,27 +92,62 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
           key: _form,
           child: ListView(
             children: <Widget>[
-              TextFormField(
-                initialValue: _initValues['name'],
-                decoration: InputDecoration(labelText: 'Name'),
-                textInputAction: TextInputAction.next,
-                onFieldSubmitted: (_) {
-                  FocusScope.of(context).requestFocus(_emailFocusNode);
-                },
-                validator: (value) {
-                  if (value.isEmpty) {
-                    return 'Please enter your full name.';
-                  }
-                  return null;
-                },
-                onSaved: (value) {
-                  _editedAccount = Account(
-                    id: _editedAccount.id,
-                    name: value,
-                    email: _editedAccount.email,
-                    imageUrl: _editedAccount.imageUrl,
-                  );
-                },
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  SizedBox(
+                    width: deviceSize.width * 0.45,
+                    child: TextFormField(
+                      initialValue: _initValues['firstName'],
+                      decoration: InputDecoration(labelText: 'First Name'),
+                      textInputAction: TextInputAction.next,
+                      onFieldSubmitted: (_) {
+                        FocusScope.of(context).requestFocus(_lastNameFocusNode);
+                      },
+                      validator: (value) {
+                        if (value.isEmpty) {
+                          return 'Please enter your first name.';
+                        }
+                        return null;
+                      },
+                      onSaved: (value) {
+                        _editedAccount = Account(
+                          id: _editedAccount.id,
+                          firstName: value,
+                          lastName: _editedAccount.lastName,
+                          email: _editedAccount.email,
+                          imageUrl: _editedAccount.imageUrl,
+                        );
+                      },
+                    ),
+                  ),
+                  SizedBox(
+                    width: deviceSize.width * 0.45,
+                    child: TextFormField(
+                      initialValue: _initValues['lastName'],
+                      decoration: InputDecoration(labelText: 'Last Name'),
+                      textInputAction: TextInputAction.next,
+                      onFieldSubmitted: (_) {
+                        FocusScope.of(context).requestFocus(_emailFocusNode);
+                      },
+                      validator: (value) {
+                        if (value.isEmpty) {
+                          return 'Please enter your last name.';
+                        }
+                        return null;
+                      },
+                      onSaved: (value) {
+                        _editedAccount = Account(
+                          id: _editedAccount.id,
+                          firstName: _editedAccount.firstName,
+                          lastName: value,
+                          email: _editedAccount.email,
+                          imageUrl: _editedAccount.imageUrl,
+                        );
+                      },
+                    ),
+                  ),
+                ],
               ),
               TextFormField(
                 initialValue: _initValues['email'],
@@ -125,7 +166,8 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                 onSaved: (value) {
                   _editedAccount = Account(
                     id: _editedAccount.id,
-                    name: _editedAccount.name,
+                    firstName: _editedAccount.firstName,
+                    lastName: _editedAccount.lastName,
                     email: value,
                     imageUrl: _editedAccount.imageUrl,
                   );
@@ -185,7 +227,8 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                       onSaved: (value) {
                         _editedAccount = Account(
                           id: _editedAccount.id,
-                          name: _editedAccount.name,
+                          firstName: _editedAccount.firstName,
+                          lastName: _editedAccount.lastName,
                           email: _editedAccount.email,
                           imageUrl: value,
                         );

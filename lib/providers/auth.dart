@@ -13,9 +13,13 @@ class Auth with ChangeNotifier {
   String _userId;
   Timer _authTimer;
 
+  bool newAccount = false;
+
   bool get isAuth {
     return token != null;
   }
+
+  
 
   String get token {
     if (_expiryDate != null &&
@@ -75,6 +79,7 @@ class Auth with ChangeNotifier {
   }
 
   Future<void> signup(String email, String password) async {
+    newAccount = true;
     return _authenticate(email, password, 'signUp');
   }
 

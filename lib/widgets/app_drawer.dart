@@ -20,7 +20,7 @@ class AppDrawer extends StatelessWidget {
             leading: Icon(Icons.home),
             onTap: () {
               Navigator.pop(context);
-              Navigator.of(context).pushReplacementNamed('/');
+              Navigator.of(context).pushReplacementNamed('/home_screen');
             },
           ),
           Divider(),
@@ -28,8 +28,7 @@ class AppDrawer extends StatelessWidget {
             title: Text('Profile'),
             leading: Icon(Icons.account_circle),
             onTap: () {
-              // Navigator.pop(context);
-              // Navigator.of(context).pushReplacementNamed('/profile-screen');
+              Navigator.of(context).pushReplacementNamed('/profile_screen');
             },
           ),
           Divider(),

@@ -8,12 +8,12 @@ import './account.dart';
 
 class Accounts with ChangeNotifier {
 List<Account> _items = [
-  Account (
-    id: 'a1',
-    name: 'Jacob Mills',
-    email: 'dreadfyre@gmail.com',
-    imageUrl: 'https://i.imgur.com/bzCgEJn.jpg'
-  ),
+  // Account (
+    // id: 'a1',
+    // name: 'Jacob Mills',
+    // email: 'dreadfyre@gmail.com',
+    // imageUrl: 'https://i.imgur.com/bzCgEJn.jpg'
+  // ),
 ];
 List<Account> get items {
     return [..._items];
@@ -24,7 +24,8 @@ List<Account> get items {
       final response = await http.post(
         url,
         body: json.encode({
-          'name': account.name,
+          'firstName': account.firstName,
+          'lastName': account.lastName,
           'email': account.email,
           'imageUrl': account.imageUrl,
         }),
@@ -32,7 +33,8 @@ List<Account> get items {
 
       final newAccount = Account(
         id: json.decode(response.body)['name'],
-        name: account.name,
+        firstName: account.firstName,
+        lastName: account.lastName,
         email: account.email,
         imageUrl: account.imageUrl,
       );

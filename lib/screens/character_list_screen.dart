@@ -5,12 +5,14 @@ import '../providers/characters.dart';
 import '../widgets/app_drawer.dart';
 import '../widgets/characters_list.dart';
 
-class HomeScreen extends StatefulWidget {
+class CharacterListScreen extends StatefulWidget {
+  static const routeName = '/character_list_screen';
+
   @override
-  _HomeScreenState createState() => _HomeScreenState();
+  _CharacterListScreenState createState() => _CharacterListScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _CharacterListScreenState extends State<CharacterListScreen> {
   var _isInit = true;
 
   @override

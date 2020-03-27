@@ -78,7 +78,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
     final deviceSize = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
-        title: Text('Create Account'),
+        title: Text('Create/Edit Account'),
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.person_add),

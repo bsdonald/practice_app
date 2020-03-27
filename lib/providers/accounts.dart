@@ -8,18 +8,17 @@ import './account.dart';
 
 class Accounts with ChangeNotifier {
 List<Account> _items = [
-  // Account (
-    // id: 'a1',
-    // name: 'Jacob Mills',
-    // email: 'dreadfyre@gmail.com',
-    // imageUrl: 'https://i.imgur.com/bzCgEJn.jpg'
-  // ),
 ];
+  final String authToken;
+  final String userId;
+
+  Accounts(this.authToken, this.userId, this._items);
+
 List<Account> get items {
     return [..._items];
   }
   Future<void> addAccount(Account account) async {
-    final url = 'https://flutter-test-project-99e11.firebaseio.com/accounts.json';
+    final url = 'https://flutter-test-project-99e11.firebaseio.com/accounts/$userId.json?auth=$authToken';
     try {
       final response = await http.post(
         url,

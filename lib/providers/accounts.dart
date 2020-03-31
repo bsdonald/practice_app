@@ -3,22 +3,21 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import '../models/http_exception.dart';
 
-
 import './account.dart';
 
 class Accounts with ChangeNotifier {
-List<Account> _items = [
-];
+  List<Account> _items = [];
   final String authToken;
   final String userId;
 
   Accounts(this.authToken, this.userId, this._items);
 
-List<Account> get items {
+  List<Account> get items {
     return [..._items];
   }
+
   Future<void> addAccount(Account account) async {
-    final url = 'https://flutter-test-project-99e11.firebaseio.com/accounts/$userId.json?auth=$authToken';
+    final url = 'https://flutter-test-project-99e11.firebaseio.com/accounts/$userId/profile.json?auth=$authToken';
     try {
       final response = await http.post(
         url,

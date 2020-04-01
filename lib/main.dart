@@ -23,8 +23,11 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider.value(
           value: Auth(),
         ),
-        ChangeNotifierProvider.value(
-          value: Characters(),
+        ChangeNotifierProxyProvider<Auth, Characters>(
+          builder: (ctx, auth, previousCharacters) => Characters(
+            auth.token,
+            previousCharacters == null ? [] : previousCharacters.items,
+          ),
         ),
         ChangeNotifierProxyProvider<Auth, Accounts>(
           builder: (ctx, auth, previousAccounts) => Accounts(
@@ -40,17 +43,11 @@ class MyApp extends StatelessWidget {
           theme: ThemeData(
             primarySwatch: Colors.red,
           ),
-          home: 
-          auth.isAuth
-          ? auth.newAccount ? CreateAccountScreen() :
-          CharacterListScreen()
-          : FutureBuilder(
+          home: auth.isAuth
+              ? auth.newAccount ? CreateAccountScreen() : CharacterListScreen()
+              : FutureBuilder(
                   future: auth.tryAutoLogin(),
-                  builder: (ctx, authResultSnapshot) =>
-                      authResultSnapshot.connectionState ==
-                              ConnectionState.waiting
-                          ? SplashScreen()
-                          : LoginScreen(),
+                  builder: (ctx, authResultSnapshot) => authResultSnapshot.connectionState == ConnectionState.waiting ? SplashScreen() : LoginScreen(),
                 ),
           routes: {
             ProfileScreen.routeName: (ctx) => ProfileScreen(),

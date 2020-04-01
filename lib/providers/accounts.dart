@@ -16,8 +16,35 @@ class Accounts with ChangeNotifier {
     return [..._items];
   }
 
+  Future<void> fetchAndSetAccounts() async {
+    var url = 'https://flutter-test-project-99e11.firebaseio.com/accounts/$userId.json?auth=$authToken';
+    try {
+      final response = await http.get(url);
+      final extractedData = json.decode(response.body) as Map<String, dynamic>;
+      if (extractedData == null) {
+        return;
+      }
+      final List<Account> loadedAccounts = [];
+      extractedData.forEach((accountId, accountData) {
+        loadedAccounts.add(
+          Account(
+            id: accountId,
+            firstName: accountData['firstName'],
+            lastName: accountData['lastName'],
+            email: accountData['email'],
+            imageUrl: accountData['imageUrl'],
+          ),
+        );
+      });
+      _items = loadedAccounts;
+      notifyListeners();
+    } catch (error) {
+      throw (error);
+    }
+  }
+
   Future<void> addAccount(Account account) async {
-    final url = 'https://flutter-test-project-99e11.firebaseio.com/accounts/$userId/profile.json?auth=$authToken';
+    final url = 'https://flutter-test-project-99e11.firebaseio.com/accounts/$userId.json?auth=$authToken';
     try {
       final response = await http.post(
         url,
@@ -26,11 +53,12 @@ class Accounts with ChangeNotifier {
           'lastName': account.lastName,
           'email': account.email,
           'imageUrl': account.imageUrl,
+          'creatorId': userId,
         }),
       );
 
       final newAccount = Account(
-        id: json.decode(response.body)['name'],
+        id: json.decode(response.body)['firstName' 'lastName'],
         firstName: account.firstName,
         lastName: account.lastName,
         email: account.email,

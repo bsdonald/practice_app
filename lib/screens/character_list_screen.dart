@@ -14,6 +14,7 @@ class CharacterListScreen extends StatefulWidget {
 
 class _CharacterListScreenState extends State<CharacterListScreen> {
   var _isInit = true;
+  var _isLoading = false;
 
   @override
   void initState() {
@@ -23,8 +24,15 @@ class _CharacterListScreenState extends State<CharacterListScreen> {
 
   @override
   void didChangeDependencies() {
-    if (_isInit = true) {
-      Provider.of<Characters>(context).fetchAndSetCharacters();
+    if (_isInit) {
+      setState(() {
+        _isLoading = true;
+      });
+      Provider.of<Characters>(context).fetchAndSetCharacters().then((_) {
+        setState(() {
+          _isLoading = false;
+        });
+      });
     }
     _isInit = false;
     super.didChangeDependencies();
@@ -45,7 +53,11 @@ class _CharacterListScreenState extends State<CharacterListScreen> {
         ],
       ),
       drawer: AppDrawer(),
-      body: Center(
+      body: _isLoading
+      ? Center (
+        child: CircularProgressIndicator(),
+      )
+      : Center(
         child: CharacterList(),
       ),
     );

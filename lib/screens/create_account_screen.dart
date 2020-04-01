@@ -126,6 +126,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                     child: TextFormField(
                       initialValue: _initValues['lastName'],
                       decoration: InputDecoration(labelText: 'Last Name'),
+                focusNode: _lastNameFocusNode,
                       textInputAction: TextInputAction.next,
                       onFieldSubmitted: (_) {
                         FocusScope.of(context).requestFocus(_emailFocusNode);

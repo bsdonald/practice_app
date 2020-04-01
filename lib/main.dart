@@ -14,6 +14,7 @@ import './screens/create_account_screen.dart';
 
 void main() => runApp(MyApp());
 
+@override
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
@@ -51,7 +52,6 @@ class MyApp extends StatelessWidget {
                 ),
           routes: {
             ProfileScreen.routeName: (ctx) => ProfileScreen(),
-            CharacterListScreen.routeName: (ctx) => CharacterListScreen(),
             AddScreen.routeName: (ctx) => AddScreen(),
             CharacterDetailScreen.routeName: (ctx) => CharacterDetailScreen(),
             LoginScreen.routeName: (ctx) => LoginScreen(),

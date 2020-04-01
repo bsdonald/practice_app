@@ -6,7 +6,6 @@ import '../widgets/app_drawer.dart';
 import '../widgets/characters_list.dart';
 
 class CharacterListScreen extends StatefulWidget {
-  static const routeName = '/character_list_screen';
 
   @override
   _CharacterListScreenState createState() => _CharacterListScreenState();

@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../providers/account.dart';
 import '../providers/accounts.dart';
 import '../providers/auth.dart';
+// import '../providers/auth.dart';
 
 class CreateAccountScreen extends StatefulWidget {
   static const routeName = '/add_account';
@@ -70,7 +71,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
     }
     _form.currentState.save();
     Provider.of<Accounts>(context, listen: false).addAccount(_editedAccount);
-    Navigator.of(context).pushReplacementNamed('/character_list_screen');
+    Navigator.of(context).pushReplacementNamed('/confirmation_screen');
   }
 
   @override

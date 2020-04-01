@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-// import 'package:practice_app/providers/account.dart';
-// import 'package:provider/provider.dart';
+import 'package:provider/provider.dart';
 
 import '../widgets/app_drawer.dart';
-// import '../providers/account.dart';
+import '../widgets/accounts_list.dart';
+import '../providers/accounts.dart';
 class ProfileScreen extends StatefulWidget {
   static const routeName = '/profile_screen';
 
@@ -12,8 +12,33 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  final _form = GlobalKey<FormState>();
+var _isInit = true;
+  var _isLoading = false;
 
+  @override
+  void initState() {
+    // Provider.of(context).fetchAndSetProducts();
+    // Future.delayed(Duration.zero).then((_){
+    //   Provider.of(context).fetchAndSetProducts();
+    // });
+    super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    if (_isInit) {
+      setState(() {
+        _isLoading = true;
+      });
+      Provider.of<Accounts>(context).fetchAndSetAccounts().then((_) {
+        setState(() {
+          _isLoading = false;
+        });
+      });
+    }
+    _isInit = false;
+    super.didChangeDependencies();
+  }
   @override
   Widget build(BuildContext context) {
     // final accountsData = Provider.of<Account>(
@@ -31,29 +56,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
           })
         ],
       ),
-      body: Padding(
-        padding: EdgeInsets.all(16),
-        child: Form(
-          key: _form,
-          child: SingleChildScrollView(
-            child: Row(
-              children: <Widget>[
-                Container( child: Text ('test'),
-              // height: 300,
-              // width: double.infinity,
-              // child: Image.network(
-              //   loadedAccount.imageUrl,
-              //   fit: BoxFit.scaleDown,
-              // ),
-            ),
-            Container(
-              child: Text ('Hello World'),
-            ),
-              ],
-            ),
-          ),
-        ),
-      ),
+      body: _isLoading
+          ? Center(
+              child: CircularProgressIndicator(),
+            )
+          : AccountList(),
     );
   }
 }

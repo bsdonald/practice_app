@@ -20,7 +20,7 @@ class AppDrawer extends StatelessWidget {
             leading: Icon(Icons.home),
             onTap: () {
               Navigator.pop(context);
-              Navigator.of(context).pushReplacementNamed('/character_list_screen');
+              Navigator.of(context).pushReplacementNamed('/');
             },
           ),
           Divider(),

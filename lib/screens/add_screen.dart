@@ -329,7 +329,7 @@ class _AddScreenState extends State<AddScreen> {
                   );
                 },
               ),
-TextFormField(
+              TextFormField(
                 initialValue: _initValues['meleeModifier'],
                 decoration: InputDecoration(labelText: 'Melee Modifier'),
                 textInputAction: TextInputAction.next,
@@ -360,7 +360,7 @@ TextFormField(
                   );
                 },
               ),
-TextFormField(
+              TextFormField(
                 initialValue: _initValues['rangedModifier'],
                 decoration: InputDecoration(labelText: 'Ranged Modifier'),
                 textInputAction: TextInputAction.next,
@@ -451,11 +451,11 @@ TextFormField(
                           level: _editedCharacter.level,
                           player: _editedCharacter.player,
                           imageUrl: value,
-                   
-                   armorClass: _editedCharacter.armorClass,
-                   hitPoints: _editedCharacter.hitPoints,
-                   meleeModifier: _editedCharacter.meleeModifier,
-                   rangedModifier: _editedCharacter.rangedModifier,     );
+                          armorClass: _editedCharacter.armorClass,
+                          hitPoints: _editedCharacter.hitPoints,
+                          meleeModifier: _editedCharacter.meleeModifier,
+                          rangedModifier: _editedCharacter.rangedModifier,
+                        );
                       },
                     ),
                   ),

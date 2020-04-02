@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:practice_app/models/http_exception.dart';
+import '../models/http_exception.dart';
 
 import './character.dart';
 
@@ -35,6 +35,9 @@ class Characters with ChangeNotifier {
     //   imageUrl: "https://units.wesnoth.org/1.12/pics/core%24images%24portraits%24saurians%24transparent%24skirmisher.png",
     //)
   ];
+  final String authToken;
+
+  Characters(this.authToken, this._items);
 
   List<Character> get items {
     return [..._items];
@@ -45,7 +48,7 @@ class Characters with ChangeNotifier {
   }
 
   Future<void> fetchAndSetCharacters() async {
-    final url = 'https://flutter-test-project-99e11.firebaseio.com/characters.json';
+    final url = 'https://flutter-test-project-99e11.firebaseio.com/characters.json?auth=$authToken';
     try {
       final response = await http.get(url);
       final extractedData = json.decode(response.body) as Map<String, dynamic>;
@@ -76,7 +79,7 @@ class Characters with ChangeNotifier {
   }
 
   Future<void> addCharacter(Character character) async {
-    final url = 'https://flutter-test-project-99e11.firebaseio.com/characters.json';
+    final url = 'https://flutter-test-project-99e11.firebaseio.com/characters.json?auth=$authToken';
     try {
       final response = await http.post(
         url,
@@ -116,7 +119,7 @@ class Characters with ChangeNotifier {
   }
 
   Future<void> removeCharacter(String id) async {
-    final url = 'https://flutter-test-project-99e11.firebaseio.com/characters/$id.json';
+    final url = 'https://flutter-test-project-99e11.firebaseio.com/characters/$id.json?auth=$authToken';
     final existingCharacterIndex = _items.indexWhere((char) => char.id == id);
     var existingCharacter = _items[existingCharacterIndex];
     _items.removeAt(existingCharacterIndex);

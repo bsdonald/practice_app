@@ -71,7 +71,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
     }
     _form.currentState.save();
     Provider.of<Accounts>(context, listen: false).addAccount(_editedAccount);
-    Navigator.of(context).pushReplacementNamed('/confirmation_screen');
+    Navigator.of(context).pushReplacementNamed('/Character_List_Screen');
   }
 
   @override

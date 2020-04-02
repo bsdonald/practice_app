@@ -20,7 +20,7 @@ class AppDrawer extends StatelessWidget {
             leading: Icon(Icons.home),
             onTap: () {
               Navigator.pop(context);
-              Navigator.of(context).pushReplacementNamed('/');
+              Navigator.of(context).pushReplacementNamed('/Character_List_Screen');
             },
           ),
           Divider(),
@@ -35,7 +35,7 @@ class AppDrawer extends StatelessWidget {
           ListTile(
             title: Text('Logout'),
             leading: Icon(Icons.exit_to_app),
-            onTap: () {Navigator.of(context).pop();
+            onTap: () {Navigator.of(context).pushReplacementNamed('/');
               Provider.of<Auth>(context, listen: false).logout();
             },
           ),

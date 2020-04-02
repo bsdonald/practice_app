@@ -112,12 +112,14 @@ class Auth with ChangeNotifier {
     _token = null;
     _userId = null;
     _expiryDate = null;
+    if (newAccount = true) {
+      newAccount = false;
+    }
     if (_authTimer != null) {
       _authTimer.cancel();
       _authTimer = null;
     }
     notifyListeners();
-    print (isAuth);
     final prefs = await SharedPreferences.getInstance();
     prefs.clear();
   }

@@ -96,7 +96,6 @@ class Characters with ChangeNotifier {
           'rangedModifier': character.rangedModifier,
         }),
       );
-
       final newCharacter = Character(
         id: json.decode(response.body)['name'],
         name: character.name,
@@ -106,9 +105,9 @@ class Characters with ChangeNotifier {
         player: character.player,
         imageUrl: character.imageUrl,
         armorClass: character.armorClass,
-          hitPoints: character.hitPoints,
-          meleeModifier: character.meleeModifier,
-          rangedModifier: character.rangedModifier,
+        hitPoints: character.hitPoints,
+        meleeModifier: character.meleeModifier,
+        rangedModifier: character.rangedModifier,
       );
       _items.add(newCharacter);
       notifyListeners();
@@ -121,20 +120,19 @@ class Characters with ChangeNotifier {
   Future<void> updateCharacter(String id, Character newCharacter) async {
     final charIndex = _items.indexWhere((char) => char.id == id);
     if (charIndex >= 0) {
-      final url =
-          'https://flutter-test-project-99e11.firebaseio.com/characters.json?auth=$authToken';
+      final url = 'https://flutter-test-project-99e11.firebaseio.com/characters/$id.json?auth=$authToken';
       await http.patch(url,
           body: json.encode({
             'name': newCharacter.name,
-          'race': newCharacter.race,
-          'favoredClass': newCharacter.favoredClass,
-          'level': newCharacter.level,
-          'player': newCharacter.player,
-          'imageUrl': newCharacter.imageUrl,
-          'armorClass': newCharacter.armorClass,
-          'hitPoints': newCharacter.hitPoints,
-          'meleeModifier': newCharacter.meleeModifier,
-          'rangedModifier': newCharacter.rangedModifier,
+            'race': newCharacter.race,
+            'favoredClass': newCharacter.favoredClass,
+            'level': newCharacter.level,
+            'player': newCharacter.player,
+            'imageUrl': newCharacter.imageUrl,
+            'armorClass': newCharacter.armorClass,
+            'hitPoints': newCharacter.hitPoints,
+            'meleeModifier': newCharacter.meleeModifier,
+            'rangedModifier': newCharacter.rangedModifier,
           }));
       _items[charIndex] = newCharacter;
       notifyListeners();

@@ -26,7 +26,7 @@ class _AddScreenState extends State<AddScreen> {
   var _isInit = true;
   var _isLoading = false;
   var _editedCharacter = Character(
-    id: '',
+    id: null,
     name: '',
     race: '',
     favoredClass: '',

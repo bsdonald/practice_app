@@ -12,6 +12,19 @@ class AddScreen extends StatefulWidget {
 }
 
 class _AddScreenState extends State<AddScreen> {
+  final _form = GlobalKey<FormState>();
+  final _playerFocusNode = FocusNode();
+  final _raceFocusNode = FocusNode();
+  final _favoredClassFocusNode = FocusNode();
+  final _levelFocusNode = FocusNode();
+  final _imageUrlController = TextEditingController();
+  final _imageUrlFocusNode = FocusNode();
+  final _hitPointsFocusNode = FocusNode();
+  final _armorClassFocusNode = FocusNode();
+  final _meleeModifierFocusNode = FocusNode();
+  final _rangedModifierFocusNode = FocusNode();
+  var _isInit = true;
+  var _isLoading = false;
   var _editedCharacter = Character(
     id: '',
     name: '',
@@ -26,8 +39,6 @@ class _AddScreenState extends State<AddScreen> {
     rangedModifier: 0,
   );
 
-  final _form = GlobalKey<FormState>();
-
   var _initValues = {
     'name': '',
     'race': '',
@@ -40,17 +51,6 @@ class _AddScreenState extends State<AddScreen> {
     'meleeModifier': '',
     'rangedModifier': '',
   };
-
-  final _playerFocusNode = FocusNode();
-  final _raceFocusNode = FocusNode();
-  final _favoredClassFocusNode = FocusNode();
-  final _levelFocusNode = FocusNode();
-  final _imageUrlController = TextEditingController();
-  final _imageUrlFocusNode = FocusNode();
-  final _hitPointsFocusNode = FocusNode();
-  final _armorClassFocusNode = FocusNode();
-  final _meleeModifierFocusNode = FocusNode();
-  final _rangedModifierFocusNode = FocusNode();
 
   @override
   void dispose() {
@@ -68,12 +68,6 @@ class _AddScreenState extends State<AddScreen> {
     super.dispose();
   }
 
-  @override
-  void initState() {
-    _imageUrlFocusNode.addListener(_updateImageUrl);
-    super.initState();
-  }
-
   void _updateImageUrl() {
     if (!_imageUrlFocusNode.hasFocus) {
       if ((!_imageUrlController.text.startsWith('http') && !_imageUrlController.text.startsWith('https')) ||
@@ -84,14 +78,83 @@ class _AddScreenState extends State<AddScreen> {
     }
   }
 
+  @override
+  void initState() {
+    _imageUrlFocusNode.addListener(_updateImageUrl);
+    super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    if (_isInit) {
+      final characterId = ModalRoute.of(context).settings.arguments as String;
+      if (characterId != null) {
+        _editedCharacter =
+            Provider.of<Characters>(context, listen: false).findById(characterId);
+        _initValues = {
+    'name': _editedCharacter.name,
+    'race': _editedCharacter.race,
+    'favoredClass': _editedCharacter.favoredClass,
+    'level': _editedCharacter.level.toString(),
+    'player': _editedCharacter.player,
+    // 'imageUrl': _editedCharacter.imageUrl,
+    'imageUrl': '',
+    'hitPoints': _editedCharacter.hitPoints.toString(),
+    'armorClass': _editedCharacter.armorClass.toString(),
+    'meleeModifier': _editedCharacter.meleeModifier.toString(),
+    'rangedModifier': _editedCharacter.rangedModifier.toString(),
+        };
+        _imageUrlController.text = _editedCharacter.imageUrl;
+      }
+    }
+    _isInit = false;
+    super.didChangeDependencies();
+  }
+
   Future<void> _saveForm() async {
     final isValid = _form.currentState.validate();
     if (!isValid) {
       return;
     }
     _form.currentState.save();
-    Provider.of<Characters>(context, listen: false).addCharacter(_editedCharacter);
-    Navigator.of(context).pop();
+    setState(() {
+      _isLoading = true;
+    });
+    if (_editedCharacter.id != null) {
+      await Provider.of<Characters>(context, listen: false)
+          .updateCharacter(_editedCharacter.id, _editedCharacter);
+    } else {
+      try {
+        await Provider.of<Characters>(context, listen: false)
+            .addCharacter(_editedCharacter);
+      } catch (error) {
+        await showDialog(
+          context: context,
+          builder: (ctx) => AlertDialog(
+            title: Text('An Error Occurred!'),
+            content: Text('Something went wrong.'),
+            actions: <Widget>[
+              FlatButton(
+                child: Text('Okay'),
+                onPressed: () {
+                  Navigator.of(ctx).pop();
+                },
+              ),
+            ],
+          ),
+        );
+      } 
+    //   finally {
+    //     setState(() {
+    //       _isLoading = false;
+    //     });
+    //     Navigator.of(context).pop();
+    //   }
+    }
+    setState(() {
+        _isLoading = false;
+      });
+      Navigator.of(context).pop();
   }
 
   @override
@@ -106,7 +169,11 @@ class _AddScreenState extends State<AddScreen> {
           ),
         ],
       ),
-      body: Padding(
+      body: _isLoading
+          ? Center(
+              child: CircularProgressIndicator(),
+            )
+          : Padding(
         padding: const EdgeInsets.all(16),
         child: Form(
           key: _form,

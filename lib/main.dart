@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:practice_app/widgets/characters_list.dart';
 import 'package:provider/provider.dart';
 
 import './screens/profile_screen.dart';

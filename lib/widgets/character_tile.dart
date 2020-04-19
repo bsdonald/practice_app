@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../providers/character.dart';
 import '../providers/characters.dart';
+import '../screens/add_screen.dart';
 
 class CharacterTile extends StatelessWidget {
   @override
@@ -15,9 +16,9 @@ class CharacterTile extends StatelessWidget {
         onTap: () {
           Navigator.of(context).pushNamed('/character-detail', arguments: character.id);
         },
-        // onLongPress: (){
-        //   print ('LongPress');
-        // },
+        onLongPress: () {
+          Navigator.of(context).pushNamed(AddScreen.routeName, arguments: character.id);
+        },
         child: Container(
           child: ListTile(
             leading: Container(
@@ -29,28 +30,37 @@ class CharacterTile extends StatelessWidget {
             ),
             title: Text(character.name),
             subtitle: Text('level: ${character.level.toString()}'),
-            trailing: Column(
-              children: <Widget>[
+            trailing:
+                // Row(
+                //   children: <Widget>[
+                //     IconButton(
+                //   icon: Icon(Icons.edit),
+                //   onPressed: () {
+                //     Navigator.of(context)
+                //         .pushNamed(AddScreen.routeName, arguments: character.id);
+                //   },
+                //   color: Theme.of(context).primaryColor,
+                // ),
                 IconButton(
-                  icon: Icon(Icons.delete),
-                  onPressed: () async {
-                    try {
-                      await Provider.of<Characters>(context, listen: false).removeCharacter(character.id);
-                    } catch (error) {
-                      scaffold.showSnackBar(
-                        SnackBar(
-                          content: Text(
-                            'Deleting failed!',
-                            textAlign: TextAlign.center,
-                          ),
-                        ),
-                      );
-                    }
-                  },
-                  color: Theme.of(context).errorColor,
-                ),
-              ],
+              icon: Icon(Icons.delete),
+              onPressed: () async {
+                try {
+                  await Provider.of<Characters>(context, listen: false).removeCharacter(character.id);
+                } catch (error) {
+                  scaffold.showSnackBar(
+                    SnackBar(
+                      content: Text(
+                        'Deleting failed!',
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  );
+                }
+              },
+              color: Theme.of(context).errorColor,
             ),
+            // ],
+            // ),
           ),
         ),
       ),

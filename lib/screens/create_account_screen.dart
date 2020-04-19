@@ -3,8 +3,6 @@ import 'package:provider/provider.dart';
 
 import '../providers/account.dart';
 import '../providers/accounts.dart';
-import '../providers/auth.dart';
-// import '../providers/auth.dart';
 
 class CreateAccountScreen extends StatefulWidget {
   static const routeName = '/add_account';

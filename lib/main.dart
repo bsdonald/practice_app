@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:practice_app/widgets/characters_list.dart';
 import 'package:provider/provider.dart';
 
 import './screens/profile_screen.dart';
@@ -43,7 +42,8 @@ class MyApp extends StatelessWidget {
         builder: (ctx, auth, _) => MaterialApp(
           title: 'Flutter Demo',
           theme: ThemeData(
-            primarySwatch: Colors.red,
+            primarySwatch: Colors.purple,
+            accentColor: Colors.deepOrange,
           ),
           home: auth.isAuth
               ? auth.newAccount ? CreateAccountScreen() : CharacterListScreen()
